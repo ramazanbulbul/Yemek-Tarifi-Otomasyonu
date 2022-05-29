@@ -1,6 +1,4 @@
-/DomainObject/
-/business/
-/utility/
-/DataTransferObject/
-/dto/
 /application/
+/DomainObject/
+/dto/
+/utility/
