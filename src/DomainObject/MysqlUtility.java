@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dto.user.AddUserRequest;
+import dto.user.CheckLoginRequest;
+import dto.user.GetUserByUsernameRequest;
 
 public class MysqlUtility {
 	
@@ -18,8 +20,9 @@ public class MysqlUtility {
     
     private static final String QUERY_ADDUSER = "INSERT INTO user (username, email, password) VALUES (?, ?, ?)";
     private static final String QUERY_GETALLUSERS = "SELECT * FROM user";
-    private static final String QUERY_GETUSERBYID = "SELECT * FROM user WHERE id = ?";
     private static final String QUERY_GETUSERBYUSERNAME = "SELECT * FROM user WHERE username = ?";
+    
+    private static final String QUERY_CHECKLOGIN = "SELECT * FROM user WHERE email = ? AND password = ?";
     
      Connection _conn = null;
     
@@ -46,11 +49,47 @@ public class MysqlUtility {
             printSQLException(e);
 		}
 	}
+    public boolean ChechLogin(CheckLoginRequest request) {		
+		try {
+			PreparedStatement preparedStatement = _conn.prepareStatement(QUERY_CHECKLOGIN);
+			preparedStatement.setString(1, request.getEmail());
+	        preparedStatement.setString(2, request.getPassword());
+	        ResultSet rs = preparedStatement.executeQuery();
+	        if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+            printSQLException(e);
+		}
+		return false;
+	}
     
     public ArrayList<User> GetAllUser() {
     	ArrayList<User> users = new ArrayList<User>();
     	try {
 			PreparedStatement preparedStatement = _conn.prepareStatement(QUERY_GETALLUSERS);
+	        ResultSet rs = preparedStatement.executeQuery();
+	        while(rs.next()) {
+	        	User user = new User();
+	        	user.setId(rs.getInt("id"));
+	        	user.setUsername(rs.getString("username"));
+	        	user.setEmail(rs.getString("email"));
+	        	user.setPassword(rs.getString("password"));
+	        	user.setPermission(rs.getInt("permission"));
+	        	user.setCreatedAt(rs.getDate("createdAt"));
+	        	users.add(user);
+	        }
+	        return users;
+		} catch (SQLException e) {
+            printSQLException(e);
+		}
+    	return null;
+    }
+    public ArrayList<User> GetUserByUsername(GetUserByUsernameRequest request) {
+    	ArrayList<User> users = new ArrayList<User>();
+    	try {
+			PreparedStatement preparedStatement = _conn.prepareStatement(QUERY_GETUSERBYUSERNAME);
+			preparedStatement.setString(1, request.getUsername());
 	        ResultSet rs = preparedStatement.executeQuery();
 	        while(rs.next()) {
 	        	User user = new User();
