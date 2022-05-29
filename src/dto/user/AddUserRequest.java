@@ -27,6 +27,9 @@ public class AddUserRequest {
 		this.Password = password;
 		this.Email = email;
 	}
+	public AddUserRequest() {
+		
+	}
 	
 	
 }
