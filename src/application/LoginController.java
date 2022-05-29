@@ -1,12 +1,25 @@
 package application;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.channels.NonWritableChannelException;
 import java.util.ResourceBundle;
+
+import business.UserBusiness;
+import dto.user.CheckLoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import utility.AlertManager;
+import utility.StageManager;
 
 public class LoginController {
 
@@ -36,17 +49,55 @@ public class LoginController {
 
     @FXML
     void btnForgetPass_onClick(ActionEvent event) {
-
+    	try {
+    		Parent root = FXMLLoader.load(getClass().getResource("fxml/ForgetPassword.fxml"));
+	    	StageManager.Show(root, 400,450);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     @FXML
     void btnLogin_onClick(ActionEvent event) {
-
+    	if (txtEmail.getText().isEmpty() || txtPass.getText().isEmpty()) {
+    		AlertManager.ShowAlert(AlertType.ERROR, "Hata!", "Deðerler boþ býrakýlamaz!");
+    		imgLogo.setImage(new Image("http://epetiste-001-site1.etempurl.com/javafx/warning.png"));
+    		return;
+		}
+    	UserBusiness ub = new UserBusiness();
+    	CheckLoginRequest request = new CheckLoginRequest();
+    	request.setEmail(txtEmail.getText());
+    	request.setPassword(txtPass.getText());
+    	if (ub.CheckLogin(request)) {
+    		AlertManager.ShowAlert(AlertType.CONFIRMATION, "Baþarýlý!", "Giriþ baþarýlý!");
+    		imgLogo.setImage(new Image("http://epetiste-001-site1.etempurl.com/javafx/checked.png"));
+    		
+    		try {
+    	    	Parent root = FXMLLoader.load(getClass().getResource("fxml/Homepage.fxml"));
+    	    	StageManager.Show(root, 400,450, false, true); 
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    		
+    		
+		}else {
+			AlertManager.ShowAlert(AlertType.ERROR, "Hata!", "Epostanýz veya þifreniz yanlýþ!");
+    		imgLogo.setImage(new Image("http://epetiste-001-site1.etempurl.com/javafx/warning.png"));
+    		return;
+		}
     }
 
     @FXML
     void btnRegister_onClick(ActionEvent event) {
-
+    	
+		try {
+	    	Parent root = FXMLLoader.load(getClass().getResource("fxml/Register.fxml"));
+	    	StageManager.Show(root, 400,450); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	
     }
 
     @FXML
