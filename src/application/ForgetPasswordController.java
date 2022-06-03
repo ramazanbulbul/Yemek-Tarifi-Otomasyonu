@@ -2,11 +2,15 @@ package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import utility.StageManager;
 
 public class ForgetPasswordController {
 
@@ -27,6 +31,7 @@ public class ForgetPasswordController {
 
     @FXML
     void btnSend_onClick(ActionEvent event) {
+		StageManager.Close(btnSend.getScene());
 
     }
 

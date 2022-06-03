@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="600.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AddRecipeController">
+   <children>
+      <Label layoutX="50.0" layoutY="50.0" text="Resim Linki" />
+      <Label layoutX="54.0" layoutY="169.0" text="Başlık" />
+      <Label layoutX="54.0" layoutY="218.0" text="Açıklama" />
+      <TextField fx:id="txtTitle" layoutX="138.0" layoutY="165.0" prefHeight="26.0" prefWidth="208.0" />
+      <TextArea fx:id="txtDescr" layoutX="138.0" layoutY="218.0" prefHeight="281.0" prefWidth="208.0" />
+      <TextArea fx:id="txtImageUrl" layoutX="140.0" layoutY="50.0" prefHeight="85.0" prefWidth="208.0" />
+      <Button fx:id="btnEkle" layoutX="138.0" layoutY="515.0" mnemonicParsing="false" onAction="#btnEkle_onClick" prefHeight="26.0" prefWidth="208.0" text="Ekle" />
+   </children>
+</AnchorPane>

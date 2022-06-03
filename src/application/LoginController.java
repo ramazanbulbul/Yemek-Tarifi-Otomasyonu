@@ -2,22 +2,21 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.NonWritableChannelException;
 import java.util.ResourceBundle;
 
+import DomainObject.User;
 import business.UserBusiness;
 import dto.user.CheckLoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import utility.AlertManager;
 import utility.StageManager;
 
@@ -45,10 +44,11 @@ public class LoginController {
     private TextField txtEmail;
 
     @FXML
-    private TextField txtPass;
+    private PasswordField txtPass;
 
     @FXML
     void btnForgetPass_onClick(ActionEvent event) {
+    	
     	try {
     		Parent root = FXMLLoader.load(getClass().getResource("fxml/ForgetPassword.fxml"));
 	    	StageManager.Show(root, 400,450);
@@ -68,13 +68,22 @@ public class LoginController {
     	CheckLoginRequest request = new CheckLoginRequest();
     	request.setEmail(txtEmail.getText());
     	request.setPassword(txtPass.getText());
-    	if (ub.CheckLogin(request)) {
-    		AlertManager.ShowAlert(AlertType.CONFIRMATION, "Baþarýlý!", "Giriþ baþarýlý!");
+    	User user = ub.CheckLogin(request);
+    	if (user != null) {
     		imgLogo.setImage(new Image("http://epetiste-001-site1.etempurl.com/javafx/checked.png"));
     		
     		try {
-    	    	Parent root = FXMLLoader.load(getClass().getResource("fxml/Homepage.fxml"));
-    	    	StageManager.Show(root, 400,450, false, true); 
+    			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Homepage.fxml"));
+    	    	Parent root = loader.load();
+    	    	HomepageController controller = loader.getController();
+    	    	controller._user = user;
+    	    	if (user.getPermission() == 0) {
+					controller.btnAdmin.setVisible(false);
+				}
+    	    	StageManager.Show(root, 400,600, false, false); 
+    	    	
+    	    	
+    	    	StageManager.Close(btnLogin.getScene());
     		} catch (IOException e) {
     			e.printStackTrace();
     		}
